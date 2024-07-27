@@ -80,14 +80,13 @@ CREATE TABLE Pedido (
     FOREIGN KEY (TipoVentaID) REFERENCES TipoVenta(TipoVentaID)
 );
 
-
-CREATE TABLE DetalleCompra (
+CREATE TABLE DetallePedido (
     DetallePedidoID INT PRIMARY KEY,
     PedidoID INT,
     ProductoID INT,
     IngredienteExtraID INT,
     CantidadProductos INT,
-    PrecioUni DECIMAL(10, 2),
+    PrecioUnitario DECIMAL(10, 2),
     PrecioTotal DECIMAL(10, 2),
     PrecioIva DECIMAL(10, 2),
     PrecioTotalDescuento DECIMAL(10, 2),
