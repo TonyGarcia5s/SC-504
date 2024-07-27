@@ -26,7 +26,7 @@ JOIN Empleado e ON s.SucursalID = e.SucursalID;
 CREATE OR REPLACE VIEW VentasPorProducto AS
 SELECT p.ProductoID, p.Nombre, SUM(dc.CantidadProductos) AS CantidadVendida, SUM(dc.PrecioTotal) AS TotalVendido
 FROM Producto p
-JOIN DetalleCompra dc ON p.ProductoID = dc.ProductoID
+JOIN DetallePedido dc ON p.ProductoID = dc.ProductoID
 GROUP BY p.ProductoID, p.Nombre;
 
 /*Vista promociones aplicadas*/
@@ -34,7 +34,7 @@ CREATE OR REPLACE VIEW PromocionesAplicadas AS
 SELECT pr.PromocionID, pr.Descripcion, COUNT(p.PedidoID) AS CantidadAplicada, SUM(dc.PrecioTotalDescuento) AS TotalDescuentoAplicado
 FROM Promocion pr
 JOIN Pedido p ON pr.PromocionID = p.PromocionID
-JOIN DetalleCompra dc ON p.PedidoID = dc.PedidoID
+JOIN DetallePedido dc ON p.PedidoID = dc.PedidoID
 GROUP BY pr.PromocionID, pr.Descripcion;
 
 /*Vista tipos de pago utilizados*/
@@ -49,7 +49,7 @@ CREATE OR REPLACE VIEW VentasPorSucursal AS
 SELECT s.SucursalID, s.Nombre AS Sucursal, SUM(dc.PrecioTotal) AS TotalVendido
 FROM Sucursal s
 JOIN Pedido p ON s.SucursalID = p.SucursalID
-JOIN DetalleCompra dc ON p.PedidoID = dc.PedidoID
+JOIN DetallePedido dc ON p.PedidoID = dc.PedidoID
 GROUP BY s.SucursalID, s.Nombre;
 
 /*Vista pedidos por cliente*/
@@ -57,12 +57,12 @@ CREATE OR REPLACE VIEW PedidosPorCliente AS
 SELECT c.ClienteID, c.Nombre, c.Apellidos, COUNT(p.PedidoID) AS CantidadPedidos, SUM(dc.PrecioTotal) AS TotalGastado
 FROM Cliente c
 JOIN Pedido p ON c.ClienteID = p.ClienteID
-JOIN DetalleCompra dc ON p.PedidoID = dc.PedidoID
+JOIN DetallePedido dc ON p.PedidoID = dc.PedidoID
 GROUP BY c.ClienteID, c.Nombre, c.Apellidos;
 
 /*Vista ingredientes extra por pedido*/
 CREATE OR REPLACE VIEW IngredientesExtraPorPedido AS
 SELECT p.PedidoID, i.IngredienteID, i.Nombre, dc.CantidadProductos, dc.PrecioTotal
 FROM Pedido p
-JOIN DetalleCompra dc ON p.PedidoID = dc.PedidoID
+JOIN DetallePedido dc ON p.PedidoID = dc.PedidoID
 JOIN IngredientesExtra i ON dc.IngredienteExtraID = i.IngredienteID;
