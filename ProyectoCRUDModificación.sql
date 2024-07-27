@@ -18,7 +18,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerSucursalPorID(
@@ -40,7 +40,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarSucursal(
@@ -66,7 +66,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarSucursal(
@@ -85,7 +85,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 
 ---------------------------------------------------------------------
@@ -109,7 +109,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerEmpleadoPorID(
@@ -133,7 +133,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarEmpleado(
@@ -163,7 +163,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarEmpleado(
@@ -182,8 +182,6 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
-
 
 ---------------------------------------------------------------------
 
@@ -206,7 +204,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerClientePorID(
@@ -230,7 +228,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarCliente(
@@ -260,7 +258,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarCliente(
@@ -279,8 +277,6 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
-
 
 ---------------------------------------------------------------------
 
@@ -291,17 +287,17 @@ CREATE OR REPLACE PROCEDURE CrearProducto(
     p_ProductoID IN Producto.ProductoID%TYPE,
     p_Nombre IN Producto.Nombre%TYPE,
     p_Precio IN Producto.Precio%TYPE,
-    p_TipoProductoID IN Producto.TipoProductoID%TYPE
+    p_Descripcion IN Producto.Descripcion%TYPE
 )
 IS
 BEGIN
-    INSERT INTO Producto (ProductoID, Nombre, Precio, TipoProductoID)
-    VALUES (p_ProductoID, p_Nombre, p_Precio, p_TipoProductoID);
+    INSERT INTO Producto (ProductoID, Nombre, Precio, Descripcion)
+    VALUES (p_ProductoID, p_Nombre, p_Precio, p_Descripcion);
 EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerProductoPorID(
@@ -310,34 +306,34 @@ CREATE OR REPLACE PROCEDURE ObtenerProductoPorID(
 IS
     v_Nombre Producto.Nombre%TYPE;
     v_Precio Producto.Precio%TYPE;
-    v_TipoProductoID Producto.TipoProductoID%TYPE;
+    v_Descripcion Producto.Descripcion%TYPE;
 BEGIN
-    SELECT Nombre, Precio, TipoProductoID INTO v_Nombre, v_Precio, v_TipoProductoID
+    SELECT Nombre, Precio, Descripcion INTO v_Nombre, v_Precio, v_Descripcion
     FROM Producto
     WHERE ProductoID = p_ProductoID;
 
-    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_Nombre || ', Precio: ' || v_Precio || ', TipoProductoID: ' || v_TipoProductoID);
+    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_Nombre || ', Precio: ' || v_Precio || ', Descripcion: ' || v_Descripcion);
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('No producto found with ProductoID: ' || p_ProductoID);
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarProducto(
     p_ProductoID IN Producto.ProductoID%TYPE,
     p_Nombre IN Producto.Nombre%TYPE,
     p_Precio IN Producto.Precio%TYPE,
-    p_TipoProductoID IN Producto.TipoProductoID%TYPE
+    p_Descripcion IN Producto.Descripcion%TYPE
 )
 IS
 BEGIN
     UPDATE Producto
     SET Nombre = p_Nombre,
         Precio = p_Precio,
-        TipoProductoID = p_TipoProductoID
+        Descripcion = p_Descripcion
     WHERE ProductoID = p_ProductoID;
 
     IF SQL%ROWCOUNT = 0 THEN
@@ -349,7 +345,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarProducto(
@@ -368,7 +364,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 ---------------------------------------------------------------------
 
@@ -377,47 +373,55 @@ END;
 /*CREAR*/
 CREATE OR REPLACE PROCEDURE CrearTipoProducto(
     p_TipoProductoID IN TipoProducto.TipoProductoID%TYPE,
-    p_Nombre IN TipoProducto.Nombre%TYPE
+    p_Tamano IN TipoProducto.Tamano%TYPE,
+    p_Descripcion IN TipoProducto.Descripcion%TYPE,
+    p_ProductoID IN TipoProducto.ProductoID%TYPE
 )
 IS
 BEGIN
-    INSERT INTO TipoProducto (TipoProductoID, Nombre)
-    VALUES (p_TipoProductoID, p_Nombre);
+    INSERT INTO TipoProducto (TipoProductoID, Tamano, Descripcion, ProductoID)
+    VALUES (p_TipoProductoID, p_Tamano, p_Descripcion, p_ProductoID);
 EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerTipoProductoPorID(
     p_TipoProductoID IN TipoProducto.TipoProductoID%TYPE
 )
 IS
-    v_Nombre TipoProducto.Nombre%TYPE;
+    v_Tamano TipoProducto.Tamano%TYPE;
+    v_Descripcion TipoProducto.Descripcion%TYPE;
+    v_ProductoID TipoProducto.ProductoID%TYPE;
 BEGIN
-    SELECT Nombre INTO v_Nombre
+    SELECT Tamano, Descripcion, ProductoID INTO v_Tamano, v_Descripcion, v_ProductoID
     FROM TipoProducto
     WHERE TipoProductoID = p_TipoProductoID;
 
-    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_Nombre);
+    DBMS_OUTPUT.PUT_LINE('Tamaño: ' || v_Tamano || ', Descripción: ' || v_Descripcion || ', ProductoID: ' || v_ProductoID);
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('No tipo producto found with TipoProductoID: ' || p_TipoProductoID);
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarTipoProducto(
     p_TipoProductoID IN TipoProducto.TipoProductoID%TYPE,
-    p_Nombre IN TipoProducto.Nombre%TYPE
+    p_Tamano IN TipoProducto.Tamano%TYPE,
+    p_Descripcion IN TipoProducto.Descripcion%TYPE,
+    p_ProductoID IN Producto.ProductoID%TYPE
 )
 IS
 BEGIN
     UPDATE TipoProducto
-    SET Nombre = p_Nombre
+    SET Tamano = p_Tamano,
+        Descripcion = p_Descripcion,
+        ProductoID = p_ProductoID
     WHERE TipoProductoID = p_TipoProductoID;
 
     IF SQL%ROWCOUNT = 0 THEN
@@ -429,7 +433,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarTipoProducto(
@@ -448,7 +452,6 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
 
 
 ---------------------------------------------------------------------
@@ -456,53 +459,61 @@ END;
 /*CRUD DE LA TABLA INGREDIENTEEXTRA*/
 
 /*CREAR*/
-CREATE OR REPLACE PROCEDURE CrearIngredienteExtra(
-    p_IngredienteID IN IngredienteExtra.IngredienteID%TYPE,
-    p_Nombre IN IngredienteExtra.Nombre%TYPE,
-    p_Precio IN IngredienteExtra.Precio%TYPE
+CREATE OR REPLACE PROCEDURE CrearIngredientesExtra(
+    p_IngredienteID IN IngredientesExtra.IngredienteID%TYPE,
+    p_Nombre IN IngredientesExtra.Nombre%TYPE,
+    p_Descripcion IN IngredientesExtra.Descripcion%TYPE,
+    p_Precio IN IngredientesExtra.Precio%TYPE,
+    p_ProductoID IN IngredientesExtra.ProductoID%TYPE
 )
 IS
 BEGIN
-    INSERT INTO IngredienteExtra (IngredienteID, Nombre, Precio)
-    VALUES (p_IngredienteID, p_Nombre, p_Precio);
+    INSERT INTO IngredientesExtra (IngredienteID, Nombre, Descripcion, Precio, ProductoID)
+    VALUES (p_IngredienteID, p_Nombre, p_Descripcion, p_Precio, p_ProductoID);
 EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerIngredienteExtraPorID(
-    p_IngredienteID IN IngredienteExtra.IngredienteID%TYPE
+    p_IngredienteID IN IngredientesExtra.IngredienteID%TYPE
 )
 IS
-    v_Nombre IngredienteExtra.Nombre%TYPE;
-    v_Precio IngredienteExtra.Precio%TYPE;
+    v_Nombre IngredientesExtra.Nombre%TYPE;
+    v_Descripcion IngredientesExtra.Descripcion%TYPE;
+    v_Precio IngredientesExtra.Precio%TYPE;
+    v_ProductoID IngredientesExtra.ProductoID%TYPE;
 BEGIN
-    SELECT Nombre, Precio INTO v_Nombre, v_Precio
-    FROM IngredienteExtra
+    SELECT Nombre, Descripcion, Precio, ProductoID INTO v_Nombre, v_Descripcion, v_Precio, v_ProductoID
+    FROM IngredientesExtra
     WHERE IngredienteID = p_IngredienteID;
 
-    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_Nombre || ', Precio: ' || v_Precio);
+    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_Nombre || ', Descripción: ' || v_Descripcion || ', Precio: ' || v_Precio || ', ProductoID: ' || v_ProductoID);
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('No ingrediente extra found with IngredienteID: ' || p_IngredienteID);
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
-CREATE OR REPLACE PROCEDURE ActualizarIngredienteExtra(
-    p_IngredienteID IN IngredienteExtra.IngredienteID%TYPE,
-    p_Nombre IN IngredienteExtra.Nombre%TYPE,
-    p_Precio IN IngredienteExtra.Precio%TYPE
+CREATE OR REPLACE PROCEDURE ActualizarIngredientesExtra(
+    p_IngredienteID IN IngredientesExtra.IngredienteID%TYPE,
+    p_Nombre IN IngredientesExtra.Nombre%TYPE,
+    p_Descripcion IN IngredientesExtra.Descripcion%TYPE,
+    p_Precio IN IngredientesExtra.Precio%TYPE,
+    p_ProductoID IN IngredientesExtra.ProductoID%TYPE
 )
 IS
 BEGIN
-    UPDATE IngredienteExtra
+    UPDATE IngredientesExtra
     SET Nombre = p_Nombre,
-        Precio = p_Precio
+        Descripcion = p_Descripcion,
+        Precio = p_Precio,
+        ProductoID = p_ProductoID
     WHERE IngredienteID = p_IngredienteID;
 
     IF SQL%ROWCOUNT = 0 THEN
@@ -514,15 +525,15 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
-CREATE OR REPLACE PROCEDURE EliminarIngredienteExtra(
-    p_IngredienteID IN IngredienteExtra.IngredienteID%TYPE
+CREATE OR REPLACE PROCEDURE EliminarIngredientesExtra(
+    p_IngredienteID IN IngredientesExtra.IngredienteID%TYPE
 )
 IS
 BEGIN
-    DELETE FROM IngredienteExtra WHERE IngredienteID = p_IngredienteID;
+    DELETE FROM IngredientesExtra WHERE IngredienteID = p_IngredienteID;
 
     IF SQL%ROWCOUNT = 0 THEN
         DBMS_OUTPUT.PUT_LINE('No ingrediente extra found with IngredienteID: ' || p_IngredienteID);
@@ -533,7 +544,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 ---------------------------------------------------------------------
 
@@ -543,19 +554,22 @@ END;
 CREATE OR REPLACE PROCEDURE CrearPedido(
     p_PedidoID IN Pedido.PedidoID%TYPE,
     p_ClienteID IN Pedido.ClienteID%TYPE,
+    p_SucursalID IN Pedido.SucursalID%TYPE,
+    p_MetodoPagoID IN Pedido.MetodoPagoID%TYPE,
+    p_PromocionID IN Pedido.PromocionID%TYPE,
+    p_TipoVentaID IN Pedido.TipoVentaID%TYPE,
     p_Fecha IN Pedido.Fecha%TYPE,
-    p_Total IN Pedido.Total%TYPE,
-    p_MetodoPagoID IN Pedido.MetodoPagoID%TYPE
+    p_Hora IN Pedido.Hora%TYPE
 )
 IS
 BEGIN
-    INSERT INTO Pedido (PedidoID, ClienteID, Fecha, Total, MetodoPagoID)
-    VALUES (p_PedidoID, p_ClienteID, p_Fecha, p_Total, p_MetodoPagoID);
+    INSERT INTO Pedido (PedidoID, ClienteID, SucursalID, MetodoPagoID, PromocionID, TipoVentaID, Fecha, Hora)
+    VALUES (p_PedidoID, p_ClienteID, p_SucursalID, p_MetodoPagoID, p_PromocionID, p_TipoVentaID, p_Fecha, p_Hora);
 EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerPedidoPorID(
@@ -563,38 +577,47 @@ CREATE OR REPLACE PROCEDURE ObtenerPedidoPorID(
 )
 IS
     v_ClienteID Pedido.ClienteID%TYPE;
-    v_Fecha Pedido.Fecha%TYPE;
-    v_Total Pedido.Total%TYPE;
+    v_SucursalID Pedido.SucursalID%TYPE;
     v_MetodoPagoID Pedido.MetodoPagoID%TYPE;
+    v_PromocionID Pedido.PromocionID%TYPE;
+    v_TipoVentaID Pedido.TipoVentaID%TYPE;
+    v_Fecha Pedido.Fecha%TYPE;
+    v_Hora Pedido.Hora%TYPE;
 BEGIN
-    SELECT ClienteID, Fecha, Total, MetodoPagoID INTO v_ClienteID, v_Fecha, v_Total, v_MetodoPagoID
+    SELECT ClienteID, SucursalID, MetodoPagoID, PromocionID, TipoVentaID, Fecha, Hora INTO v_ClienteID, v_SucursalID, v_MetodoPagoID, v_PromocionID, v_TipoVentaID, v_Fecha, v_Hora
     FROM Pedido
     WHERE PedidoID = p_PedidoID;
 
-    DBMS_OUTPUT.PUT_LINE('ClienteID: ' || v_ClienteID || ', Fecha: ' || v_Fecha || ', Total: ' || v_Total || ', MetodoPagoID: ' || v_MetodoPagoID);
+    DBMS_OUTPUT.PUT_LINE('ClienteID: ' || v_ClienteID || ', SucursalID: ' || v_SucursalID || ', MetodoPagoID: ' || v_MetodoPagoID || ', Promoción: ' || v_PromocionID || ', TipoVentaID: ' || v_TipoVentaID || ', Fecha: ' || v_Fecha || ', Hora: ' || v_Hora);
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('No pedido found with PedidoID: ' || p_PedidoID);
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarPedido(
     p_PedidoID IN Pedido.PedidoID%TYPE,
     p_ClienteID IN Pedido.ClienteID%TYPE,
+    p_SucursalID IN Pedido.SucursalID%TYPE,
+    p_MetodoPagoID IN Pedido.MetodoPagoID%TYPE,
+    p_PromocionID IN Pedido.PromocionID%TYPE,
+    p_TipoVentaID IN Pedido.TipoVentaID%TYPE,
     p_Fecha IN Pedido.Fecha%TYPE,
-    p_Total IN Pedido.Total%TYPE,
-    p_MetodoPagoID IN Pedido.MetodoPagoID%TYPE
+    p_Hora IN Pedido.Hora%TYPE
 )
 IS
 BEGIN
     UPDATE Pedido
     SET ClienteID = p_ClienteID,
+        SucursalID = p_SucursalID,
+        MetodoPagoID = p_MetodoPagoID,
+        PromocionID = p_PromocionID,
+        TipoVentaID = p_TipoVentaID,
         Fecha = p_Fecha,
-        Total = p_Total,
-        MetodoPagoID = p_MetodoPagoID
+        Hora = p_Hora
     WHERE PedidoID = p_PedidoID;
 
     IF SQL%ROWCOUNT = 0 THEN
@@ -606,7 +629,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarPedido(
@@ -625,7 +648,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 ---------------------------------------------------------------------
 
@@ -634,47 +657,47 @@ END;
 /*CREAR*/
 CREATE OR REPLACE PROCEDURE CrearMetodoPago(
     p_MetodoPagoID IN MetodoPago.MetodoPagoID%TYPE,
-    p_Nombre IN MetodoPago.Nombre%TYPE
+    p_TipoPago IN MetodoPago.TipoPago%TYPE
 )
 IS
 BEGIN
-    INSERT INTO MetodoPago (MetodoPagoID, Nombre)
-    VALUES (p_MetodoPagoID, p_Nombre);
+    INSERT INTO MetodoPago (MetodoPagoID, TipoPago)
+    VALUES (p_MetodoPagoID, p_TipoPago);
 EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerMetodoPagoPorID(
     p_MetodoPagoID IN MetodoPago.MetodoPagoID%TYPE
 )
 IS
-    v_Nombre MetodoPago.Nombre%TYPE;
+    v_TipoPago MetodoPago.TipoPago%TYPE;
 BEGIN
-    SELECT Nombre INTO v_Nombre
+    SELECT TipoPago INTO v_TipoPago
     FROM MetodoPago
     WHERE MetodoPagoID = p_MetodoPagoID;
 
-    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_Nombre);
+    DBMS_OUTPUT.PUT_LINE('Tipo de Pago: ' || v_TipoPago);
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('No metodo pago found with MetodoPagoID: ' || p_MetodoPagoID);
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarMetodoPago(
     p_MetodoPagoID IN MetodoPago.MetodoPagoID%TYPE,
-    p_Nombre IN MetodoPago.Nombre%TYPE
+    p_TipoPago IN MetodoPago.TipoPago%TYPE
 )
 IS
 BEGIN
     UPDATE MetodoPago
-    SET Nombre = p_Nombre
+    SET TipoPago = p_TipoPago
     WHERE MetodoPagoID = p_MetodoPagoID;
 
     IF SQL%ROWCOUNT = 0 THEN
@@ -686,7 +709,7 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
+
 
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarMetodoPago(
@@ -705,290 +728,14 @@ EXCEPTION
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
-/
 
 
 ---------------------------------------------------------------------
 
-/*CRUD DE LA TABLA PROMOCION*/
+/*CRUD DE LA TABLA TIPOVENTA*/
 
 /*CREAR*/
-CREATE OR REPLACE PROCEDURE CrearPromocion(
-    p_PromocionID IN Promocion.PromocionID%TYPE,
-    p_Nombre IN Promocion.Nombre%TYPE,
-    p_Descripcion IN Promocion.Descripcion%TYPE,
-    p_FechaInicio IN Promocion.FechaInicio%TYPE,
-    p_FechaFin IN Promocion.FechaFin%TYPE,
-    p_Descuento IN Promocion.Descuento%TYPE
-)
-IS
-BEGIN
-    INSERT INTO Promocion (PromocionID, Nombre, Descripcion, FechaInicio, FechaFin, Descuento)
-    VALUES (p_PromocionID, p_Nombre, p_Descripcion, p_FechaInicio, p_FechaFin, p_Descuento);
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*LEER*/
-CREATE OR REPLACE PROCEDURE ObtenerPromocionPorID(
-    p_PromocionID IN Promocion.PromocionID%TYPE
-)
-IS
-    v_Nombre Promocion.Nombre%TYPE;
-    v_Descripcion Promocion.Descripcion%TYPE;
-    v_FechaInicio Promocion.FechaInicio%TYPE;
-    v_FechaFin Promocion.FechaFin%TYPE;
-    v_Descuento Promocion.Descuento%TYPE;
-BEGIN
-    SELECT Nombre, Descripcion, FechaInicio, FechaFin, Descuento INTO v_Nombre, v_Descripcion, v_FechaInicio, v_FechaFin, v_Descuento
-    FROM Promocion
-    WHERE PromocionID = p_PromocionID;
-
-    DBMS_OUTPUT.PUT_LINE('Nombre: ' || v_Nombre || ', Descripcion: ' || v_Descripcion || ', FechaInicio: ' || v_FechaInicio || ', FechaFin: ' || v_FechaFin || ', Descuento: ' || v_Descuento);
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('No promocion found with PromocionID: ' || p_PromocionID);
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*ACTUALIZAR*/
-CREATE OR REPLACE PROCEDURE ActualizarPromocion(
-    p_PromocionID IN Promocion.PromocionID%TYPE,
-    p_Nombre IN Promocion.Nombre%TYPE,
-    p_Descripcion IN Promocion.Descripcion%TYPE,
-    p_FechaInicio IN Promocion.FechaInicio%TYPE,
-    p_FechaFin IN Promocion.FechaFin%TYPE,
-    p_Descuento IN Promocion.Descuento%TYPE
-)
-IS
-BEGIN
-    UPDATE Promocion
-    SET Nombre = p_Nombre,
-        Descripcion = p_Descripcion,
-        FechaInicio = p_FechaInicio,
-        FechaFin = p_FechaFin,
-        Descuento = p_Descuento
-    WHERE PromocionID = p_PromocionID;
-
-    IF SQL%ROWCOUNT = 0 THEN
-        DBMS_OUTPUT.PUT_LINE('No promocion found with PromocionID: ' || p_PromocionID);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Promocion updated successfully');
-    END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*ELIMINAR*/
-CREATE OR REPLACE PROCEDURE EliminarPromocion(
-    p_PromocionID IN Promocion.PromocionID%TYPE
-)
-IS
-BEGIN
-    DELETE FROM Promocion WHERE PromocionID = p_PromocionID;
-
-    IF SQL%ROWCOUNT = 0 THEN
-        DBMS_OUTPUT.PUT_LINE('No promocion found with PromocionID: ' || p_PromocionID);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Promocion deleted successfully');
-    END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
----------------------------------------------------------------------
-
-/*CRUD DE LA TABLA DETALLECOMPRA*/
-
-/*CREAR*/
-CREATE OR REPLACE PROCEDURE CrearDetalleCompra(
-    p_DetalleCompraID IN DetalleCompra.DetalleCompraID%TYPE,
-    p_CompraID IN DetalleCompra.CompraID%TYPE,
-    p_ProductoID IN DetalleCompra.ProductoID%TYPE,
-    p_Cantidad IN DetalleCompra.Cantidad%TYPE,
-    p_PrecioUnitario IN DetalleCompra.PrecioUnitario%TYPE
-)
-IS
-BEGIN
-    INSERT INTO DetalleCompra (DetalleCompraID, CompraID, ProductoID, Cantidad, PrecioUnitario)
-    VALUES (p_DetalleCompraID, p_CompraID, p_ProductoID, p_Cantidad, p_PrecioUnitario);
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*LEER*/
-CREATE OR REPLACE PROCEDURE ObtenerDetalleCompraPorID(
-    p_DetalleCompraID IN DetalleCompra.DetalleCompraID%TYPE
-)
-IS
-    v_CompraID DetalleCompra.CompraID%TYPE;
-    v_ProductoID DetalleCompra.ProductoID%TYPE;
-    v_Cantidad DetalleCompra.Cantidad%TYPE;
-    v_PrecioUnitario DetalleCompra.PrecioUnitario%TYPE;
-BEGIN
-    SELECT CompraID, ProductoID, Cantidad, PrecioUnitario INTO v_CompraID, v_ProductoID, v_Cantidad, v_PrecioUnitario
-    FROM DetalleCompra
-    WHERE DetalleCompraID = p_DetalleCompraID;
-
-    DBMS_OUTPUT.PUT_LINE('CompraID: ' || v_CompraID || ', ProductoID: ' || v_ProductoID || ', Cantidad: ' || v_Cantidad || ', PrecioUnitario: ' || v_PrecioUnitario);
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('No detalle compra found with DetalleCompraID: ' || p_DetalleCompraID);
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*ACTUALIZAR*/
-CREATE OR REPLACE PROCEDURE ActualizarDetalleCompra(
-    p_DetalleCompraID IN DetalleCompra.DetalleCompraID%TYPE,
-    p_CompraID IN DetalleCompra.CompraID%TYPE,
-    p_ProductoID IN DetalleCompra.ProductoID%TYPE,
-    p_Cantidad IN DetalleCompra.Cantidad%TYPE,
-    p_PrecioUnitario IN DetalleCompra.PrecioUnitario%TYPE
-)
-IS
-BEGIN
-    UPDATE DetalleCompra
-    SET CompraID = p_CompraID,
-        ProductoID = p_ProductoID,
-        Cantidad = p_Cantidad,
-        PrecioUnitario = p_PrecioUnitario
-    WHERE DetalleCompraID = p_DetalleCompraID;
-
-    IF SQL%ROWCOUNT = 0 THEN
-        DBMS_OUTPUT.PUT_LINE('No detalle compra found with DetalleCompraID: ' || p_DetalleCompraID);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Detalle compra updated successfully');
-    END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*ELIMINAR*/
-CREATE OR REPLACE PROCEDURE EliminarDetalleCompra(
-    p_DetalleCompraID IN DetalleCompra.DetalleCompraID%TYPE
-)
-IS
-BEGIN
-    DELETE FROM DetalleCompra WHERE DetalleCompraID = p_DetalleCompraID;
-
-    IF SQL%ROWCOUNT = 0 THEN
-        DBMS_OUTPUT.PUT_LINE('No detalle compra found with DetalleCompraID: ' || p_DetalleCompraID);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Detalle compra deleted successfully');
-    END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-
----------------------------------------------------------------------
-/*CRUD DE LA TABLA REPORTE*/
-
-/*CREAR*/
-CREATE OR REPLACE PROCEDURE CrearReporte(
-    p_ReporteID IN Reporte.ReporteID%TYPE,
-    p_Titulo IN Reporte.Titulo%TYPE,
-    p_Fecha IN Reporte.Fecha%TYPE,
-    p_Contenido IN Reporte.Contenido%TYPE
-)
-IS
-BEGIN
-    INSERT INTO Reporte (ReporteID, Titulo, Fecha, Contenido)
-    VALUES (p_ReporteID, p_Titulo, p_Fecha, p_Contenido);
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*LEER*/
-CREATE OR REPLACE PROCEDURE ObtenerReportePorID(
-    p_ReporteID IN Reporte.ReporteID%TYPE
-)
-IS
-    v_Titulo Reporte.Titulo%TYPE;
-    v_Fecha Reporte.Fecha%TYPE;
-    v_Contenido Reporte.Contenido%TYPE;
-BEGIN
-    SELECT Titulo, Fecha, Contenido INTO v_Titulo, v_Fecha, v_Contenido
-    FROM Reporte
-    WHERE ReporteID = p_ReporteID;
-
-    DBMS_OUTPUT.PUT_LINE('Titulo: ' || v_Titulo || ', Fecha: ' || v_Fecha || ', Contenido: ' || v_Contenido);
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('No reporte found with ReporteID: ' || p_ReporteID);
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*ACTUALIZAR*/
-CREATE OR REPLACE PROCEDURE ActualizarReporte(
-    p_ReporteID IN Reporte.ReporteID%TYPE,
-    p_Titulo IN Reporte.Titulo%TYPE,
-    p_Fecha IN Reporte.Fecha%TYPE,
-    p_Contenido IN Reporte.Contenido%TYPE
-)
-IS
-BEGIN
-    UPDATE Reporte
-    SET Titulo = p_Titulo,
-        Fecha = p_Fecha,
-        Contenido = p_Contenido
-    WHERE ReporteID = p_ReporteID;
-
-    IF SQL%ROWCOUNT = 0 THEN
-        DBMS_OUTPUT.PUT_LINE('No reporte found with ReporteID: ' || p_ReporteID);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Reporte updated successfully');
-    END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
-/*ELIMINAR*/
-CREATE OR REPLACE PROCEDURE EliminarReporte(
-    p_ReporteID IN Reporte.ReporteID%TYPE
-)
-IS
-BEGIN
-    DELETE FROM Reporte WHERE ReporteID = p_ReporteID;
-
-    IF SQL%ROWCOUNT = 0 THEN
-        DBMS_OUTPUT.PUT_LINE('No reporte found with ReporteID: ' || p_ReporteID);
-    ELSE
-        DBMS_OUTPUT.PUT_LINE('Reporte deleted successfully');
-    END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
-END;
-/
-
----------------------------------------------------------------------
-/*CRUD DE LA TABLA TIPO VENTA*/
-
-/*CREAR*/
-CREATE OR REPLACE PROCEDURE CrearTipoVenta(
+CREATE OR REPLACE PROCEDURE CrearMTipoVenta(
     p_TipoVentaID IN TipoVenta.TipoVentaID%TYPE,
     p_MetodoRetiro IN TipoVenta.MetodoRetiro%TYPE
 )
@@ -1001,6 +748,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
 
+
 /*LEER*/
 CREATE OR REPLACE PROCEDURE ObtenerTipoVentaPorID(
     p_TipoVentaID IN TipoVenta.TipoVentaID%TYPE
@@ -1012,13 +760,14 @@ BEGIN
     FROM TipoVenta
     WHERE TipoVentaID = p_TipoVentaID;
 
-    DBMS_OUTPUT.PUT_LINE('Metodo Retiro: ' || v_MetodoRetiro);
+    DBMS_OUTPUT.PUT_LINE('Mètodo de Retiro: ' || v_MetodoRetiro);
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
         DBMS_OUTPUT.PUT_LINE('No tipo venta found with TipoVentaID: ' || p_TipoVentaID);
     WHEN OTHERS THEN
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
+
 
 /*ACTUALIZAR*/
 CREATE OR REPLACE PROCEDURE ActualizarTipoVenta(
@@ -1041,6 +790,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
 END;
 
+
 /*ELIMINAR*/
 CREATE OR REPLACE PROCEDURE EliminarTipoVenta(
     p_TipoVentaID IN TipoVenta.TipoVentaID%TYPE
@@ -1052,7 +802,282 @@ BEGIN
     IF SQL%ROWCOUNT = 0 THEN
         DBMS_OUTPUT.PUT_LINE('No tipo venta found with TipoVentaID: ' || p_TipoVentaID);
     ELSE
-        DBMS_OUTPUT.PUT_LINE('Tipo venta deleted successfully');
+        DBMS_OUTPUT.PUT_LINE('Tipo Venta deleted successfully');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+---------------------------------------------------------------------
+
+/*CRUD DE LA TABLA PROMOCION*/
+
+/*CREAR*/
+CREATE OR REPLACE PROCEDURE CrearPromocion(
+    p_PromocionID IN Promocion.PromocionID%TYPE,
+    p_Descripcion IN Promocion.Descripcion%TYPE,
+    p_Descuento IN Promocion.Descuento%TYPE
+)
+IS
+BEGIN
+    INSERT INTO Promocion (PromocionID, Descripcion, Descuento)
+    VALUES (p_PromocionID, p_Descripcion, p_Descuento);
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*LEER*/
+CREATE OR REPLACE PROCEDURE ObtenerPromocionPorID(
+    p_PromocionID IN Promocion.PromocionID%TYPE
+)
+IS
+    v_Descripcion Promocion.Descripcion%TYPE;
+    v_Descuento Promocion.Descuento%TYPE;
+BEGIN
+    SELECT Descripcion, Descuento INTO v_Descripcion, v_Descuento
+    FROM Promocion
+    WHERE PromocionID = p_PromocionID;
+
+    DBMS_OUTPUT.PUT_LINE('Descripcion: ' || v_Descripcion || ', Descuento: ' || v_Descuento);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No promocion found with PromocionID: ' || p_PromocionID);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*ACTUALIZAR*/
+CREATE OR REPLACE PROCEDURE ActualizarPromocion(
+    p_PromocionID IN Promocion.PromocionID%TYPE,
+    p_Descripcion IN Promocion.Descripcion%TYPE,
+    p_Descuento IN Promocion.Descuento%TYPE
+)
+IS
+BEGIN
+    UPDATE Promocion
+    SET Descripcion = p_Descripcion,
+        Descuento = p_Descuento
+    WHERE PromocionID = p_PromocionID;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No promocion found with PromocionID: ' || p_PromocionID);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Promocion updated successfully');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*ELIMINAR*/
+CREATE OR REPLACE PROCEDURE EliminarPromocion(
+    p_PromocionID IN Promocion.PromocionID%TYPE
+)
+IS
+BEGIN
+    DELETE FROM Promocion WHERE PromocionID = p_PromocionID;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No promocion found with PromocionID: ' || p_PromocionID);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Promocion deleted successfully');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+---------------------------------------------------------------------
+
+/*CRUD DE LA TABLA DETALLEPEDIDO*/
+
+/*CREAR*/
+CREATE OR REPLACE PROCEDURE CrearDetallePedido(
+    p_DetallePedidoID IN DetallePedido.DetallePedidoID%TYPE,
+    p_PedidoID IN DetallePedido.PedidoID%TYPE,
+    p_ProductoID IN DetallePedido.ProductoID%TYPE,
+    p_IngredienteExtraID IN DetallePedido.IngredienteExtraID%TYPE,
+    p_CantidadProductos IN DetallePedido.CantidadProductos%TYPE,
+    p_PrecioUnitario IN DetallePedido.PrecioUnitario%TYPE,
+    p_PrecioTotal IN DetallePedido.PrecioTotal%TYPE,
+    p_PrecioIva IN DetallePedido.PrecioIva%TYPE,
+    p_PrecioTotalDescuento IN DetallePedido.PrecioTotalDescuento%TYPE
+)
+IS
+BEGIN
+    INSERT INTO DetallePedido (DetallePedidoID, PedidoID, ProductoID, IngredienteExtraID, CantidadProductos, PrecioUnitario, PrecioTotal, PrecioIva, PrecioTotalDescuento)
+    VALUES (p_DetallePedidoID, p_PedidoID, p_ProductoID, p_IngredienteExtraID, p_CantidadProductos, p_PrecioUnitario, p_PrecioTotal, p_PrecioIva, p_PrecioTotalDescuento);
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*LEER*/
+CREATE OR REPLACE PROCEDURE ObtenerDetallePedidoPorID(
+    p_DetallePedidoID IN DetallePedido.DetallePedidoID%TYPE
+)
+IS
+    v_PedidoID DetallePedido.PedidoID%TYPE;
+    v_ProductoID DetallePedido.ProductoID%TYPE;
+    v_IngredienteExtraID DetallePedido.IngredienteExtraID%TYPE;
+    v_CantidadProductos DetallePedido.CantidadProductos%TYPE;
+    v_PrecioUnitario DetallePedido.PrecioUnitario%TYPE;
+    v_PrecioTotal DetallePedido.PrecioTotal%TYPE;
+    v_PrecioIva DetallePedido.PrecioIva%TYPE;
+    v_PrecioTotalDescuento DetallePedido.PrecioTotalDescuento%TYPE;
+BEGIN
+    SELECT PedidoID, ProductoID, IngredienteExtraID, CantidadProductos, PrecioUnitario, PrecioTotal, PrecioIva, PrecioTotalDescuento INTO v_PedidoID, v_ProductoID, v_IngredienteExtraID, v_CantidadProductos, v_PrecioUnitario, v_PrecioTotal, v_PrecioIva, v_PrecioTotalDescuento
+    FROM DetallePedido
+    WHERE DetallePedidoID = p_DetallePedidoID;
+
+    DBMS_OUTPUT.PUT_LINE('PedidoID: ' || v_PedidoID || ', ProductoID: ' || v_ProductoID || ', IngredienteExtraID: ' || v_IngredienteExtraID || ', CantidadProductos: ' || v_CantidadProductos || ', PrecioUnitario: ' || v_PrecioUnitario || ', PrecioTotal: ' || v_PrecioTotal || ', PrecioIva: ' || v_PrecioIva || ', PrecioTotalDescuento: ' || v_PrecioTotalDescuento);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No detalle pedido found with DetallePedidoID: ' || p_DetallePedidoID);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*ACTUALIZAR*/
+CREATE OR REPLACE PROCEDURE ActualizarDetallePedido(
+    p_DetallePedidoID IN DetallePedido.DetallePedidoID%TYPE,
+    p_PedidoID IN DetallePedido.PedidoID%TYPE,
+    p_ProductoID IN DetallePedido.ProductoID%TYPE,
+    p_IngredienteExtraID IN DetallePedido.IngredienteExtraID%TYPE,
+    p_CantidadProductos IN DetallePedido.CantidadProductos%TYPE,
+    p_PrecioUnitario IN DetallePedido.PrecioUnitario%TYPE,
+    p_PrecioTotal IN DetallePedido.PrecioTotal%TYPE,
+    p_PrecioIva IN DetallePedido.PrecioIva%TYPE,
+    p_PrecioTotalDescuento IN DetallePedido.PrecioTotalDescuento%TYPE
+)
+IS
+BEGIN
+    UPDATE DetallePedido
+    SET PedidoID = p_PedidoID,
+        ProductoID = p_ProductoID,
+        IngredienteExtraID = p_IngredienteExtraID,
+        CantidadProductos = p_CantidadProductos,
+        PrecioUnitario = p_PrecioUnitario,
+        PrecioTotal = p_PrecioTotal,
+        PrecioIva = p_PrecioIva,
+        PrecioTotalDescuento = p_PrecioTotalDescuento
+    WHERE DetallePedidoID = p_DetallePedidoID;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No detalle pedio found with DetallePedidoID: ' || p_DetallePedidoID);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Detalle pedido updated successfully');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*ELIMINAR*/
+CREATE OR REPLACE PROCEDURE EliminarDetallePedido(
+    p_DetallePedidoID IN DetallePedido.DetallePedidoID%TYPE
+)
+IS
+BEGIN
+    DELETE FROM DetallePedido WHERE DetallePedidoID = p_DetallePedidoID;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No detalle pedido found with DetallePedidoID: ' || p_DetallePedidoID);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Detalle pedido deleted successfully');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+---------------------------------------------------------------------
+/*CRUD DE LA TABLA REPORTES*/
+
+/*CREAR*/
+CREATE OR REPLACE PROCEDURE CrearReportes(
+    p_ReporteID IN Reportes.ReporteID%TYPE,
+    p_Descripcion IN Reportes.Descripcion%TYPE,
+    p_FechaGeneracion IN Reportes.FechaGeneracion%TYPE
+)
+IS
+BEGIN
+    INSERT INTO Reportes (ReporteID, Descripcion, FechaGeneracion)
+    VALUES (p_ReporteID, p_Descripcion, p_FechaGeneracion);
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*LEER*/
+CREATE OR REPLACE PROCEDURE ObtenerReportePorID(
+    p_ReporteID IN Reportes.ReporteID%TYPE
+)
+IS
+    v_Descripcion Reportes.Descripcion%TYPE;
+    v_FechaGeneracion Reportes.FechaGeneracion%TYPE;
+BEGIN
+    SELECT Descripcion, FechaGeneracion INTO v_Descripcion, v_FechaGeneracion
+    FROM Reportes
+    WHERE ReporteID = p_ReporteID;
+
+    DBMS_OUTPUT.PUT_LINE('Descripción: ' || v_Descripcion || ', FechaGeneración: ' || v_FechaGeneracion);
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No reporte found with ReporteID: ' || p_ReporteID);
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*ACTUALIZAR*/
+CREATE OR REPLACE PROCEDURE ActualizarReportes(
+    p_ReporteID IN Reportes.ReporteID%TYPE,
+    p_Descripcion IN Reportes.Descripcion%TYPE,
+    p_FechaGeneracion IN Reportes.FechaGeneracion%TYPE
+)
+IS
+BEGIN
+    UPDATE Reportes
+    SET Descripcion = p_Descripcion,
+        FechaGeneracion = p_FechaGeneracion
+    WHERE ReporteID = p_ReporteID;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No reporte found with ReporteID: ' || p_ReporteID);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Reportes updated successfully');
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+END;
+
+
+/*ELIMINAR*/
+CREATE OR REPLACE PROCEDURE EliminarReporte(
+    p_ReporteID IN Reportes.ReporteID%TYPE
+)
+IS
+BEGIN
+    DELETE FROM Reportes WHERE ReporteID = p_ReporteID;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No reporte found with ReporteID: ' || p_ReporteID);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Reportes deleted successfully');
     END IF;
 EXCEPTION
     WHEN OTHERS THEN
