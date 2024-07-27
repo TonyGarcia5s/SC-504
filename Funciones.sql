@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION CalcularTotalPedidoConIVA (
     v_Total DECIMAL(10, 2);
 BEGIN
     SELECT SUM(PrecioTotal) INTO v_Total
-    FROM DetalleCompra
+    FROM DetallePedido
     WHERE PedidoID = p_PedidoID;
 
     RETURN v_Total * 1.13; 
@@ -19,7 +19,7 @@ CREATE OR REPLACE FUNCTION CalcularTotalPedidoConDescuento (
     v_Total DECIMAL(10, 2);
 BEGIN
     SELECT SUM(PrecioTotalDescuento) INTO v_Total
-    FROM DetalleCompra
+    FROM DetallePedido
     WHERE PedidoID = p_PedidoID;
 
     RETURN v_Total;
@@ -59,7 +59,7 @@ CREATE OR REPLACE FUNCTION CalcularTotalGastoCliente (
 BEGIN
     SELECT SUM(PrecioTotal) INTO v_TotalGasto
     FROM Pedido P
-    JOIN DetalleCompra DC ON P.PedidoID = DC.PedidoID
+    JOIN DetallePedido DC ON P.PedidoID = DC.PedidoID
     WHERE P.ClienteID = p_ClienteID;
 
     RETURN v_TotalGasto;
@@ -138,7 +138,7 @@ CREATE OR REPLACE FUNCTION ObtenerCantidadProductosPedido (
     v_CantidadProductos INT;
 BEGIN
     SELECT SUM(CantidadProductos) INTO v_CantidadProductos
-    FROM DetalleCompra
+    FROM DetallePedido
     WHERE PedidoID = p_PedidoID;
 
     RETURN v_CantidadProductos;
@@ -189,7 +189,7 @@ CREATE OR REPLACE FUNCTION CalcularIVAPedido (p_PedidoID INT) RETURN DECIMAL IS
     v_IVA DECIMAL(10, 2);
 BEGIN
     SELECT SUM(PrecioTotal) INTO v_Total
-    FROM DetalleCompra
+    FROM DetallePedido
     WHERE PedidoID = p_PedidoID;
 
     v_IVA := v_Total * 0.13; -- Asumiendo un IVA del 13%
