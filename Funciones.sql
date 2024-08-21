@@ -9,7 +9,14 @@ BEGIN
     FROM DetallePedido
     WHERE PedidoID = p_PedidoID;
 
-    RETURN v_Total * 1.13; 
+    RETURN v_Total * 0.13; 
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0; 
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Calcular el total de un pedido con descuento
@@ -23,6 +30,13 @@ BEGIN
     WHERE PedidoID = p_PedidoID;
 
     RETURN v_Total;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Para obtener el nombre completo de un cliente
@@ -36,6 +50,13 @@ BEGIN
     WHERE ClienteID = p_ClienteID;
 
     RETURN v_NombreCompleto;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Para obtener el nombre completo de un empleado
@@ -49,6 +70,13 @@ BEGIN
     WHERE EmpleadoID = p_EmpleadoID;
 
     RETURN v_NombreCompleto;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Para calcular el total de gasto de un cliente
@@ -63,6 +91,13 @@ BEGIN
     WHERE P.ClienteID = p_ClienteID;
 
     RETURN v_TotalGasto;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el numero de pedidos de un cliente
@@ -76,6 +111,13 @@ BEGIN
     WHERE ClienteID = p_ClienteID;
 
     RETURN v_NumeroPedidos;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el nombre de una sucursal
@@ -89,6 +131,13 @@ BEGIN
     WHERE SucursalID = p_SucursalID;
 
     RETURN v_NombreSucursal;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Calcular el total de un reporte
@@ -102,6 +151,13 @@ BEGIN
     WHERE ReporteID = p_ReporteID;
 
     RETURN v_Total;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el tipo de pago de un pedido
@@ -116,6 +172,13 @@ BEGIN
     WHERE P.PedidoID = p_PedidoID;
 
     RETURN v_TipoPago;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener la descripcion de un producto
@@ -129,6 +192,13 @@ BEGIN
     WHERE ProductoID = p_ProductoID;
 
     RETURN v_DescripcionProducto;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener la cantidad de productos en un pedido
@@ -142,6 +212,13 @@ BEGIN
     WHERE PedidoID = p_PedidoID;
 
     RETURN v_CantidadProductos;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el descuento aplicado a un pedido
@@ -156,6 +233,13 @@ BEGIN
     WHERE PD.PedidoID = p_PedidoID;
 
     RETURN v_Descuento;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el precio unitario de un producto
@@ -169,6 +253,13 @@ BEGIN
     WHERE ProductoID = p_ProductoID;
 
     RETURN v_PrecioUnitario;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el nombre de un producto
@@ -180,6 +271,13 @@ BEGIN
     WHERE ProductoID = p_ProductoID;
 
     RETURN v_NombreProducto;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 
@@ -192,9 +290,16 @@ BEGIN
     FROM DetallePedido
     WHERE PedidoID = p_PedidoID;
 
-    v_IVA := v_Total * 0.13; -- Asumiendo un IVA del 13%
+    v_IVA := v_Total * 0.13;
 
     RETURN v_IVA;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener la dirrecion de un cliente
@@ -206,6 +311,13 @@ BEGIN
     WHERE ClienteID = p_ClienteID;
 
     RETURN v_Direccion;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener la frecuencia de pedidos de un cliente
@@ -217,6 +329,13 @@ BEGIN
     WHERE ClienteID = p_ClienteID;
 
     RETURN v_Frecuencia;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener la descripcion de la promocion aplicada a un pedido
@@ -229,6 +348,13 @@ BEGIN
     WHERE PD.PedidoID = p_PedidoID;
 
     RETURN v_DescripcionPromocion;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el metodo de retiro de un pedido
@@ -241,6 +367,13 @@ BEGIN
     WHERE P.PedidoID = p_PedidoID;
 
     RETURN v_MetodoRetiro;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener la descripcion de un ingrediente extra
@@ -252,6 +385,13 @@ BEGIN
     WHERE IngredienteID = p_IngredienteID;
 
     RETURN v_DescripcionIngrediente;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Calcular el total de IVA para los reportes generados
@@ -263,6 +403,13 @@ BEGIN
     WHERE ReporteID = p_ReporteID;
 
     RETURN v_TotalIVA;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el email de un cliente
@@ -274,6 +421,13 @@ BEGIN
     WHERE ClienteID = p_ClienteID;
 
     RETURN v_Email;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el precio de un ingrediente extra
@@ -285,6 +439,13 @@ BEGIN
     WHERE IngredienteID = p_IngredienteID;
 
     RETURN v_Precio;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el nombre del tipo de producto
@@ -296,6 +457,13 @@ BEGIN
     WHERE TipoProductoID = p_TipoProductoID;
 
     RETURN v_NombreTipoProducto;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
 
 --Obtener el tamaño del tipo de producto
@@ -307,4 +475,11 @@ BEGIN
     WHERE TipoProductoID = p_TipoProductoID;
 
     RETURN v_Tamano;
+    
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+        RETURN NULL;
 END;
