@@ -24,6 +24,20 @@ CREATE TABLE Cliente (
     Email VARCHAR(100)
 );
 
+ALTER TABLE Cliente ADD TotalGastado DECIMAL(10, 2) DEFAULT 0;
+
+ALTER TABLE Cliente ADD UltimoPedido DATE;
+
+CREATE TABLE Producto (
+    ProductoID INT PRIMARY KEY,
+    Nombre VARCHAR(100),
+    Precio DECIMAL(10, 2),
+    Descripcion VARCHAR(255)
+);
+
+ALTER TABLE Producto ADD TotalVentas DECIMAL(10, 2) DEFAULT 0;
+
+
 CREATE TABLE TipoProducto (
     TipoProductoID INT PRIMARY KEY,
     Tamano VARCHAR(10),
@@ -32,12 +46,6 @@ CREATE TABLE TipoProducto (
     FOREIGN KEY (ProductoID) REFERENCES Producto(ProductoID)
 );
 
-CREATE TABLE Producto (
-    ProductoID INT PRIMARY KEY,
-    Nombre VARCHAR(100),
-    Precio DECIMAL(10, 2),
-    Descripcion VARCHAR(255)
-);
 
 CREATE TABLE IngredientesExtra (
     IngredienteID INT PRIMARY KEY,
@@ -79,6 +87,8 @@ CREATE TABLE Pedido (
     FOREIGN KEY (PromocionID) REFERENCES Promocion(PromocionID),
     FOREIGN KEY (TipoVentaID) REFERENCES TipoVenta(TipoVentaID)
 );
+
+ALTER TABLE Pedido ADD (TotalPedido DECIMAL(10, 2));
 
 CREATE TABLE DetallePedido (
     DetallePedidoID INT PRIMARY KEY,
